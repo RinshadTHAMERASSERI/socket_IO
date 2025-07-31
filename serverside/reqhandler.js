@@ -12,6 +12,7 @@ const  transporter = nodemailer.createTransport({
         pass:'',
     },
 })
+
 export async function signUp(req,res) {
     try{
         const{email,password,username,cpassword,phone,profile}= req.body;
@@ -48,13 +49,27 @@ export async function signIn(req,res) {
 
         const succcess = await bcrypt.compare(password,user.password)
         if(succcess!== true)
-            return res.status(404).send({msg:' email pr password not match'})
+            return res.status(404).send({msg:' email or password not match'})
 
-        const token = await sign({userId:user._id},process.env.JWT_KEY,{expiresIn:'24'})
+        const token = await sign({userId:user._id},process.env.JWT_KEY,{expiresIn:'24h'})
         return res.status(200).send({msg:'successfully logined',token})
 
     }catch (error){
         return res.status(404).send({msg:'error'})
 
     }
+   
+}
+export async function profile (req,res) {
+    try{
+        const _id = req.user.userId
+
+        const user = await userSchema.findOne({_id},{password:0});
+        if(!user)
+            return res.status(403).send({msg:'login to continue'})
+        return res.status(200).send(user)
+    }catch(error){
+        return res.status(404).send ({msg:'error'})
+    }
+    
 }

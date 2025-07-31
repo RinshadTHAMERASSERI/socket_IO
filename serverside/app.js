@@ -1,13 +1,13 @@
 //3rd
-import express, { Router } from "express";
+import express from "express";
 import connection from "./connection.js";
 import env from 'dotenv'
 import http from 'http'
 import cors from 'cors'
-import { error } from "console";
+// import { error } from "console";
 import router from "./router.js";
 import { Server } from "socket.io";
-import { Socket } from "dgram";
+// import { Socket } from "dgram";
 
 env.config()
 const app = express()
