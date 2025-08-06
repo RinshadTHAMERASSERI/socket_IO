@@ -73,3 +73,27 @@ export async function profile (req,res) {
     }
     
 }
+export async function getUsers(req, res) {
+  try {
+    const _id = req.user.userId
+    const users = await userSchema.findOne({_id}); 
+    if(!users)
+        return res.status(403).send({msg:"login to continue"})
+    const userData = await userSchema.find({_id:{$ne:_id}});
+    return res.status(200).send({userData});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ msg: 'Error fetching users' });
+  }
+}
+export async function navBar(req,res) {
+    try {
+        const _id =req.user.userId
+        const user =await userSchema.findOne({_id})
+        if(!user)
+            return res.status(403).send({msg:'login to continue'})
+        return res.status(200).send({user})
+    } catch (error) {
+        return res.status(403).send({msg:"error"})
+    }
+}
